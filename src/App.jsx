@@ -16,21 +16,37 @@ const Layout = ({ children }) => {
       <Navbar />
       
       {/* 👇 ADD THIS BLOCK HERE. It creates the premium glow for all pages. */}
-      <div 
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          zIndex: -50, // Puts it behind everything
-         background: `
-  radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03), transparent 50%),
-  linear-gradient(0deg, #000000 0%, #010f10 100%)
-`
+      <div
+  style={{
+    position: "fixed",
+    inset: 0,
+    zIndex: -100,
 
-        }} 
-      />
+    background: `
+
+      radial-gradient(
+        900px 500px at 20% 10%,
+        rgba(0,198,255,0.10),
+        transparent 60%
+      ),
+
+      radial-gradient(
+        700px 400px at 80% 30%,
+        rgba(0,114,255,0.08),
+        transparent 60%
+      ),
+
+      linear-gradient(
+        180deg,
+        #050a14 0%,
+        #070d18 40%,
+        #050a14 100%
+      )
+
+    `,
+
+  }}
+/>
       {/* 👆 END OF BACKGROUND BLOCK */}
 
       {children}

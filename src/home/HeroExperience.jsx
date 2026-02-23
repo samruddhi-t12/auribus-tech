@@ -1,154 +1,435 @@
 import { useEffect, useRef, useState } from "react";
 
-const FRAME_COUNT = 126;
+const FRAME_COUNT = 200;
 
 export default function HeroExperience() {
+
   const [frame, setFrame] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const containerRef = useRef(null);
-  const preloadedImagesRef = useRef([]);
+  const imagesRef = useRef([]);
+
+
+
 
   useEffect(() => {
+
+    imagesRef.current = [];
+
+    let firstLoaded = false;
+
     for (let i = 1; i <= FRAME_COUNT; i++) {
+
       const img = new Image();
+
       img.src = `/frames/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-      preloadedImagesRef.current.push(img);
+
+      img.onload = () => {
+
+        if (!firstLoaded) {
+
+          setIsLoaded(true);
+          firstLoaded = true;
+
+        }
+
+      };
+
+      imagesRef.current.push(img);
+
     }
+
   }, []);
 
+
+
+
+
   useEffect(() => {
+
     let ticking = false;
 
     const onScroll = () => {
+
       if (!containerRef.current || ticking) return;
+
       ticking = true;
 
       requestAnimationFrame(() => {
-        const container = containerRef.current;
-        const { top, height } = container.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
 
-        const scrollDistance = -top;
-        const maxScroll = Math.max(height - windowHeight, 1);
+        const rect = containerRef.current.getBoundingClientRect();
 
-        let p = scrollDistance / maxScroll;
-        p = Math.max(0, Math.min(p, 1));
+        const scroll = -rect.top;
 
-        setProgress(p);
-        setFrame(Math.floor(p * (FRAME_COUNT - 1)));
+        const maxScroll = rect.height - window.innerHeight;
+
+        const progress = Math.max(0, Math.min(scroll / maxScroll, 1));
+
+        const newFrame = Math.floor(progress * (FRAME_COUNT - 1));
+
+        setFrame(newFrame);
+
         ticking = false;
+
       });
+
     };
 
     window.addEventListener("scroll", onScroll);
-    onScroll(); 
-    
+
+    onScroll();
+
     return () => window.removeEventListener("scroll", onScroll);
+
   }, []);
 
-  const fadeUp = (visible) => ({
-    opacity: visible ? 1 : 0,
-    transform: visible ? "translateY(0)" : "translateY(14px)",
-    transition: "opacity 0.6s ease, transform 0.6s ease",
-    pointerEvents: visible ? "auto" : "none",
+
+
+
+
+
+  const fade = (show) => ({
+
+    opacity: show ? 1 : 0,
+
+    transform: show ? "translateY(0)" : "translateY(24px)",
+
+    transition: "all 1.1s cubic-bezier(0.22, 1, 0.36, 1)",
+
   });
 
+
+
+
+
+
+
+  const headingStyle = {
+
+    textShadow: "0 4px 30px rgba(0,0,0,0.65)"
+
+  };
+
+
+
+  const paragraphStyle = {
+
+    textShadow: "0 2px 18px rgba(0,0,0,0.55)"
+
+  };
+
+
+
+
+
+
+
   return (
-    <section ref={containerRef} className="relative bg-black w-full" style={{ height: "400vh" }}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
 
-        <img
-          src={`/frames/ezgif-frame-${String(frame + 1).padStart(3, "0")}.jpg`}
-          alt="Auribus cinematic"
-          className="
-            w-full h-full object-cover
-            scale-[1.04]
-            blur-[0.25px]
-            contrast-[1.05]
-            brightness-[0.9]
-          "
-        />
+    <section
 
-        <div className="absolute inset-0 bg-[url('/grain.png')] opacity-[0.05] pointer-events-none z-10" />
+      ref={containerRef}
 
-        <div className="absolute inset-0 z-20 pointer-events-none text-white">
+      className="relative w-full bg-black"
 
-          <div
-            className="absolute left-[10%] top-1/2 -translate-y-1/2"
-            style={fadeUp(progress < 0.15)}
-          >
-            {progress < 0.15 && (
-              <h1 className="text-5xl font-semibold">
-                Auribus Tech
-              </h1>
-            )}
-          </div>
+      style={{ height: "400vh" }}
 
-          <div className="absolute left-[10%] bottom-[12%] max-w-md">
+    >
 
-            <div style={fadeUp(progress >= 0.15 && progress < 0.4)}>
-              {progress >= 0.15 && progress < 0.4 && (
+
+
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+
+
+
+
+        {isLoaded && (
+
+          <img
+
+            src={imagesRef.current[frame]?.src}
+
+            alt="Ventus Soft"
+
+            className="w-full h-full object-cover"
+
+          />
+
+        )}
+
+
+
+
+
+
+
+        {/* HERO NAME */}
+
+        <div className="absolute inset-0 z-20 flex items-center text-white">
+
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+
+            <div style={fade(frame < 25)}>
+
+              {frame < 25 && (
+
                 <>
-                  <h2 className="text-3xl font-semibold mb-2">
-                    BUILD BETTER APPS
-                  </h2>
-                  <p className="text-base opacity-80">
-                    High-performance Web & Mobile solutions. React, Node, & Native.
-                  </p>
-                </>
-              )}
-            </div>
 
-            <div style={fadeUp(progress >= 0.4 && progress < 0.65)}>
-              {progress >= 0.4 && progress < 0.65 && (
-                <>
-                  <h2 className="text-3xl font-semibold mb-2">
-                    AUTOMATE EVERYTHING
-                  </h2>
-                  <p className="text-base opacity-80">
-                    CI/CD pipelines ensuring 99.9% reliable releases.
-                  </p>
-                </>
-              )}
-            </div>
+                  <h1
 
-            <div style={fadeUp(progress >= 0.65 && progress < 0.85)}>
-              {progress >= 0.65 && progress < 0.85 && (
-                <>
-                  <h2 className="text-3xl font-semibold mb-2">
-                    SCALE ON DEMAND
-                  </h2>
-                  <p className="text-base opacity-80">
-                    Enterprise Kubernetes & Cloud Infrastructure on AWS, Azure, & GCP.
-                  </p>
-                </>
-              )}
-            </div>
+                    className="text-5xl md:text-7xl font-semibold tracking-tight"
 
-            <div style={fadeUp(progress >= 0.85)}>
-              {progress >= 0.85 && (
-                <>
-                  <h2 className="text-3xl font-semibold mb-2">
-                    SECURE BY DESIGN
-                  </h2>
-                  <p className="text-base opacity-80 mb-5">
-                    Monitoring, security & reliability built into every layer.
-                  </p>
+                    style={headingStyle}
 
-                  <a
-                    href="/contact"
-                    className="inline-block px-8 py-4 bg-white text-black rounded-lg pointer-events-auto"
                   >
-                    Talk to our experts →
-                  </a>
+
+                    Ventus Soft
+
+                  </h1>
+
+
+                  <p
+
+                    className="mt-5 text-lg md:text-xl text-white/75 font-normal"
+
+                    style={paragraphStyle}
+
+                  >
+
+                    Engineering the systems behind modern software
+
+                  </p>
+
                 </>
+
               )}
+
             </div>
 
           </div>
+
         </div>
 
+
+
+
+
+
+
+        {/* BOTTOM SUBTITLES */}
+
+        <div className="absolute bottom-[12%] w-full text-white">
+
+
+
+
+          {/* Gradient Contrast Layer */}
+
+          <div
+
+            className="absolute inset-0 pointer-events-none"
+
+            style={{
+
+              background:
+
+                "linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.28), transparent)",
+
+              transform: "translateY(35%)"
+
+            }}
+
+          />
+
+
+
+
+
+
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+
+            <div className="max-w-lg">
+
+
+
+
+
+              {/* Foundation */}
+
+              <div style={fade(frame >= 25 && frame < 66)}>
+
+                {frame >= 25 && frame < 66 && (
+
+                  <>
+
+                    <h2
+
+                      className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight mb-3"
+
+                      style={headingStyle}
+
+                    >
+
+                      Scalable foundations
+
+                    </h2>
+
+
+                    <p
+
+                      className="text-white/75 font-normal"
+
+                      style={paragraphStyle}
+
+                    >
+
+                      Core architecture engineered for stability
+
+                    </p>
+
+                  </>
+
+                )}
+
+              </div>
+
+
+
+
+
+
+
+              {/* Growth */}
+
+              <div style={fade(frame >= 66 && frame < 190)}>
+
+                {frame >= 66 && frame < 190 && (
+
+                  <>
+
+                    <h2
+
+                      className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight mb-3"
+
+                      style={headingStyle}
+
+                    >
+
+                      Handles growth automatically
+
+                    </h2>
+
+
+                    <p
+
+                      className="text-white/75 font-normal"
+
+                      style={paragraphStyle}
+
+                    >
+
+                      Automated pipelines and systems working continuously
+
+                    </p>
+
+                  </>
+
+                )}
+
+              </div>
+
+
+
+
+
+
+
+              {/* Secure */}
+
+              <div style={fade(frame >= 190)}>
+
+                {frame >= 190 && (
+
+                  <>
+
+                    <h2
+
+                      className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight mb-4"
+
+                      style={headingStyle}
+
+                    >
+
+                      Secure and production-ready
+
+                    </h2>
+
+
+                    <p
+
+                      className="text-white/75 mb-7 font-normal"
+
+                      style={paragraphStyle}
+
+                    >
+
+                      Built for reliability, protection, and continuous operation
+
+                    </p>
+
+
+
+
+
+                    <a
+
+                      href="/contact"
+
+                      className="inline-block px-9 py-4 bg-white text-black font-medium rounded-lg transition-all duration-300 hover:bg-white/90 hover:scale-[1.03]"
+
+                      style={{
+
+                        boxShadow:
+
+                          "0 10px 40px rgba(255,255,255,0.18)"
+
+                      }}
+
+                    >
+
+                      Talk to our experts →
+
+                    </a>
+
+
+                  </>
+
+                )}
+
+              </div>
+
+
+
+
+
+
+            </div>
+
+          </div>
+
+
+
+
+        </div>
+
+
+
+
       </div>
+
     </section>
+
   );
+
 }
