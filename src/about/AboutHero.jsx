@@ -77,7 +77,7 @@ export default function AboutHero() {
               <div className="absolute bottom-6 left-6 px-4 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-3 z-20 transition-transform duration-500 group-hover:translate-y-[-5px]">
                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
                  <span className="text-xs font-bold text-white tracking-wide uppercase">
-                   Auribus Tech • In action
+                   Ventus Soft • In action
                  </span>
               </div>
             </motion.div>

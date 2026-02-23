@@ -132,9 +132,9 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-5">
                 <ContactLink 
-                  href="mailto:support@auribustech.com" 
+                  href="mailto:support@ventussoft.com" 
                   icon={<FaEnvelope size={18} />} 
-                  text="support@auribustech.com" 
+                  text="support@ventussoft.com" 
                 />
                 <ContactLink 
                   href="tel:+918149524655" 
@@ -144,7 +144,7 @@ export default function ContactPage() {
                 <ContactLink 
                   href="https://www.linkedin.com/in/auribus-tech-673657268/" 
                   icon={<FaLinkedin size={18} />} 
-                  text="LinkedIn: Auribus Tech" 
+                  text="LinkedIn" 
                 />
               </div>
             </div>

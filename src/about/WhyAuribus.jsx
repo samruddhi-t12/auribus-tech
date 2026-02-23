@@ -24,7 +24,7 @@ export default function WhyAuribus() {
                 viewport={{ once: true }}
                 className="text-4xl lg:text-5xl font-medium text-white mb-6 tracking-tight"
               >
-                Why Choose Auribus Tech?
+                Why Us?
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}

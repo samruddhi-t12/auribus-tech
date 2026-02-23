@@ -41,7 +41,7 @@ export default function WhyAuribus() {
           {/* LEFT CONTENT */}
           <div>
             <h2 className="text-4xl lg:text-5xl font-medium text-white mb-6 tracking-tight">
-              Why Auribus Tech?
+              Why Ventus Soft?
             </h2>
 
             <p className="text-xl lg:text-2xl text-white/65 mb-12 leading-relaxed max-w-xl">
@@ -89,7 +89,7 @@ export default function WhyAuribus() {
                 className="flex items-center gap-3 hover:text-sky-300 transition-colors"
               >
                 <span className="text-2xl">📧</span> 
-                support@auribustech.com
+                support@ventussoft.com
               </a>
               
               <a 
